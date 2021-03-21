@@ -13,7 +13,8 @@ function generateAnkiCards() {
   let content = document.getElementsByClassName('thecontent');
 
   function isChildValid(child) {
-    return child.nodeType == 1 &&
+    return child != undefined &&
+      child.nodeType == 1 &&
       child.innerHTML != '' &&
       !child.classList.contains('announce') && ['p', 'ul', 'div'].includes(child.nodeName.toLowerCase());
   }
@@ -37,7 +38,7 @@ function generateAnkiCards() {
   for (let i = 0; i < content.childNodes.length; i++) {
     child = content.childNodes[i];
     console.log('child:');
-    //console.log(child);
+    console.log(child);
 
     //check child
     if (!isChildValid(child)) {
@@ -60,7 +61,11 @@ function generateAnkiCards() {
           do {
             i++;
           }
-          while (!isChildValid(content.childNodes[i]) && content.childNodes[i].nodeName.toLowerCase() != 'p')
+          while (
+            content.childNodes[i] &&
+            !isChildValid(content.childNodes[i]) &&  
+            content.childNodes[i].nodeName.toLowerCase() != 'p'
+          )
 
 
         } else
@@ -89,6 +94,7 @@ function generateAnkiCards() {
           currentCard = undefined;
           break;
         }
+
 
         currentCard += '<br><br>' + child.innerHTML.replaceAll('\t', ' ');
         cardStatus = 3;
