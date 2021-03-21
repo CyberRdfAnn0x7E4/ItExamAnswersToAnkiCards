@@ -2,7 +2,9 @@ function generateAnkiCards() {
 
   const DEBUG = false;
 
+
   if (!DEBUG) {
+    var oldConsoleLog = console.log;
     console.log = function (a) { };
   }
 
@@ -32,6 +34,8 @@ function generateAnkiCards() {
     console.log(content);
   } else {
     console.error('no content found!');
+    if (!DEBUG)
+      console.log = oldConsoleLog;
     return false;
   }
 
@@ -42,7 +46,7 @@ function generateAnkiCards() {
 
     //check child
     if (!isChildValid(child)) {
-      console.log('skip child');
+      console.log('skip child:');
       continue;
     }
 
@@ -60,21 +64,34 @@ function generateAnkiCards() {
           currentCard = undefined;
           do {
             i++;
+            console.log('skip to:');
+            console.log(content.childNodes[i]);
           }
           while (
             content.childNodes[i] &&
-            !isChildValid(content.childNodes[i]) &&  
+            !isChildValid(content.childNodes[i]) &&
             content.childNodes[i].nodeName.toLowerCase() != 'p'
-          )
+          );
+          i--;
 
 
-        } else
+        } else {
           currentCard = child.innerHTML.replaceAll('\t', ' ') + "<br>";
-        cardStatus = 1;
+          console.log('question:');
+          console.log(currentCard);
+          cardStatus = 1;
+        }
+
         //currentCard += '<<<questionEND>>>';
         break;
       case 'ul':
         //options and answer
+        if (cardStatus != 1) {
+          cardStatus = 0;
+          currentCard = undefined;
+          break;
+        }
+
         currentCard += child.innerText.replaceAll('\n', '<br>');
         //currentCard += '<<<optionsEND>>>';
         currentCard += "\t";
@@ -113,12 +130,15 @@ function generateAnkiCards() {
 
   if (cards.length > 0) {
     console.info("Karten sind fertig!");
-    ankiCards = '';
+    let ankiCards = '';
     cards.forEach(card => ankiCards += card);
     console.info(ankiCards);
   } else {
     console.info("Karten konnten nicht generiert werden! :-/")
   }
+
+  if (!DEBUG)
+    console.log = oldConsoleLog;
 
 }
 
