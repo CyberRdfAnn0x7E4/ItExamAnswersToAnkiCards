@@ -92,13 +92,15 @@ function generateAnkiCards() {
           break;
         }
 
-        currentCard += child.innerText.replaceAll('\n', '<br>');
+        currentCard += child.innerText.replaceAll('\n', '<br><br>');
         //currentCard += '<<<optionsEND>>>';
         currentCard += "\t";
         child.querySelectorAll('strong').forEach(answer => {
           console.log('answer: ' + answer.innerText);
           console.log(answer);
-          currentCard += '<br>' + answer.innerHTML.replaceAll('\t', ' ');
+          currentCard += '<ul>';
+          currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ') + '</li>';
+          currentCard += '</ul>';
         })
         //currentCard += '<<<answerEND>>>';
         cardStatus = 2;
