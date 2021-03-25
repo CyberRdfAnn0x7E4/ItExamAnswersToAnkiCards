@@ -95,13 +95,16 @@ function generateAnkiCards() {
         currentCard += child.innerText.replaceAll('\n', '<br><br>');
         //currentCard += '<<<optionsEND>>>';
         currentCard += "\t";
-        child.querySelectorAll('strong').forEach(answer => {
+        answers = child.querySelectorAll('strong');
+        if (answers.length > 1)
+          currentCard += '<ul>';
+        answers.forEach(answer => {
           console.log('answer: ' + answer.innerText);
           console.log(answer);
-          currentCard += '<ul>';
           currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ') + '</li>';
+        });
+        if (answers.length > 1)
           currentCard += '</ul>';
-        })
         //currentCard += '<<<answerEND>>>';
         cardStatus = 2;
 
