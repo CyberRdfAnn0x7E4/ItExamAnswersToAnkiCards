@@ -101,7 +101,11 @@ function generateAnkiCards() {
         answers.forEach(answer => {
           console.log('answer: ' + answer.innerText);
           console.log(answer);
-          currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ') + '</li>';
+          if (answers.length > 1)
+            currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ') + '</li>';
+          else
+            currentCard += answer.innerHTML.replaceAll('\t', ' ');
+
         });
         if (answers.length > 1)
           currentCard += '</ul>';
