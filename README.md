@@ -19,3 +19,6 @@ blablabla
 
 * currently no image import
 * not really tested yet
+
+## Bugs
+If you find a bug, please write an issue. Preferably with a link to the page.
