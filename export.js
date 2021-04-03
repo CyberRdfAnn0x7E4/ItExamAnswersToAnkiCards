@@ -8,6 +8,9 @@ function generateAnkiCards() {
     console.log = function (a) { };
   }
 
+  let numOfExportedCards = 0;
+  let skippedCardsDueToImg = 0;
+  
 
   let currentCard = undefined;
   var cards = [];
@@ -57,10 +60,12 @@ function generateAnkiCards() {
         //question
         if (currentCard != undefined) {
           addCard(currentCard);
+          numOfExportedCards++;
         }
 
         if (child.querySelector('img')) {
           console.warn('Frage enthält ein Bild und wird übersprungen! Frage: "' + child.innerText.substring(0, 30) + '..."');
+          skippedCardsDueToImg++;
           currentCard = undefined;
           do {
             i++;
@@ -139,6 +144,8 @@ function generateAnkiCards() {
 
   if (cards.length > 0) {
     console.info("Karten sind fertig!");
+    console.info(`Es wurden ${numOfExportedCards} Karten erstellt.`);
+    console.info(`Es wurden ${skippedCardsDueToImg} Karten übersprungen weil sie ein Bild enthalten!`);
     let ankiCards = '';
     cards.forEach(card => ankiCards += card);
     console.info(ankiCards);
