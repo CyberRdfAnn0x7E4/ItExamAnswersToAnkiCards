@@ -116,11 +116,11 @@ function generateAnkiCards() {
       case 'div':
         //hint
         if (cardStatus != 2) {
-          console.warn("skip card! failed to parse! card: '" + currentCard.substring(0, 30) + '..."')
+          cardContent = currentCard == undefined ? '###no card###' : currentCard.substring(0, 30);
+          console.warn("skip card! failed to parse! card: '" + cardContent + '..."')
           currentCard = undefined;
           break;
         }
-
 
         currentCard += '<br><br>' + child.innerHTML.replaceAll('\t', ' ');
         cardStatus = 3;
