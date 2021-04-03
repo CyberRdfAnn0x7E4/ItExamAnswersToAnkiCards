@@ -18,10 +18,17 @@ function generateAnkiCards() {
   let content = document.getElementsByClassName('thecontent');
 
   function isChildValid(child) {
-    return child != undefined &&
-      child.nodeType == 1 &&
-      child.innerHTML != '' &&
-      !child.classList.contains('announce') && ['p', 'ul', 'div'].includes(child.nodeName.toLowerCase());
+    valid = child != undefined &&
+    child.nodeType == 1 &&
+    child.innerHTML != '' &&
+    !child.classList.contains('announce') && ['p', 'ul', 'div'].includes(child.nodeName.toLowerCase());
+    
+    if (!valid && child){
+      console.warn(child.nodeName);
+    }
+
+
+    return valid;
   }
 
   function addCard(card) {
@@ -59,34 +66,26 @@ function generateAnkiCards() {
       case 'p':
         //question
         if (currentCard != undefined) {
+          console.error(currentCard);
           addCard(currentCard);
           numOfExportedCards++;
         }
 
-        if (child.querySelector('img')) {
-          console.warn('Frage enthält ein Bild und wird übersprungen! Frage: "' + child.innerText.substring(0, 30) + '..."');
-          skippedCardsDueToImg++;
-          currentCard = undefined;
-          do {
-            i++;
-            console.log('skip to:');
-            console.log(content.childNodes[i]);
-          }
-          while (
-            content.childNodes[i] &&
-            !isChildValid(content.childNodes[i]) &&
-            content.childNodes[i].nodeName.toLowerCase() != 'p'
-          );
-          i--;
+        currentCard = "";
+
+        // if (child.querySelector('img')) {
+        //   console.warn('Frage enthält ein Bild und wird übersprungen! Frage: "' + child.innerText.substring(0, 30) + '..."');
+        //   currentCard += "###HIER SOLLTE EIGENTLICH EIN BILD SEIN###";
+        //   skippedCardsDueToImg++;
 
 
-        } else {
-          currentCard = child.innerHTML.replaceAll('\t', ' ') + "<br>";
-          console.log('question:');
-          console.log(currentCard);
-          cardStatus = 1;
-        }
+        // }
 
+        currentCard += child.innerHTML.replaceAll('\t', ' ').replaceAll('\n', '<br>') + "<br>";
+        console.log('question:');
+        console.log(currentCard);
+        cardStatus = 1;
+        
         //currentCard += '<<<questionEND>>>';
         break;
       case 'ul':
@@ -107,9 +106,9 @@ function generateAnkiCards() {
           console.log('answer: ' + answer.innerText);
           console.log(answer);
           if (answers.length > 1)
-            currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ') + '</li>';
+            currentCard += '<li>' + answer.innerHTML.replaceAll('\t', ' ').replaceAll('\n', '<br>') + '</li>';
           else
-            currentCard += answer.innerHTML.replaceAll('\t', ' ');
+            currentCard += answer.innerHTML.replaceAll('\t', ' ').replaceAll('\n', '<br>');
 
         });
         if (answers.length > 1)
@@ -127,7 +126,7 @@ function generateAnkiCards() {
           break;
         }
 
-        currentCard += '<br><br>' + child.innerHTML.replaceAll('\t', ' ');
+        currentCard += '<br><br>' + child.innerText.replaceAll('\t', ' ').replaceAll('\n', '<br>');
         cardStatus = 3;
         break;
       default:
